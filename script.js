@@ -31,12 +31,10 @@ let map=[
 for(let i = 0;i<map.length;i++){
 
     for(let j = 0; j<map[i].length;j++){
-        if(map[i][j] === 1){
-           if (map[i][j] === 1) {
-                ctx.fillStyle = "blue";
-                ctx.fillRect(j * WidthSize, i * HighSize, WidthSize, HighSize);
-            } 
-        }
+        let x = WidthSize * j
+        let y = HighSize * i
+
+        
 
     }
 
