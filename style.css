@@ -1,0 +1,23 @@
+body{
+    background-color:midnightblue;
+    margin: 0;
+    height: 100vh;
+
+    display: flex;
+    justify-content: center;
+    align-items:center ;
+
+}
+.canvas_conteiner{
+    width:50vw;
+    height:50vh;
+    background-color:aliceblue;
+
+    display: grid;
+    place-items: center;
+
+}
+
+canvas{
+    background-color: black;
+}
