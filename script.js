@@ -115,7 +115,20 @@ for (let i = 0; i < map.length; i++) {
 
 drawPac()
 
-canvas.addEventListener("keydown",function(event){
-    console.log("Item precionado: ${event.key} (KeyCode: ${event.keyCode})");
+window.onload = function(){
+
+    canvas.addEventListener("keydown",function(event){
+        chave = event.key
+        if(chave == "w"){
+            console.log("Mover para cima")
+        }else if(chave == "s"){
+            console.log("Mover para baixo")
+        }else if(chave == "d"){
+            console.log("Mover para direita")
+        }else if(chave == "a"){
+            console.log("Mover para esquerda")
+        }
 });
+}
+
 
