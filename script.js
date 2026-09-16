@@ -10,8 +10,10 @@ const HighSize = 30;
 let gameMap = new Map();
 let pacman = new Pacman(1 * WidthSize + WidthSize / 2, 1 * HighSize + HighSize / 2, WidthSize, HighSize);
 
+
 function gameLoop() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+
 
     pacman.update(gameMap.map);
     gameMap.drawMap(ctx, WidthSize, HighSize);

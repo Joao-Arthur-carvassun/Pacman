@@ -28,21 +28,71 @@ export class Pacman {
     }
 
     update(map) {
-        let nextX = this.x + this.dx;
-        let nextY = this.y + this.dy;
 
-        let checkX = nextX + (this.dx > 0 ? this.radius : (this.dx < 0 ? -this.radius : 0));
-        let checkY = nextY + (this.dy > 0 ? this.radius : (this.dy < 0 ? -this.radius : 0));
+    let nextX = this.x + this.dx;
+    if (!this.checkCollision(nextX, this.y, map)) {
+        this.x = nextX;
+    } else {
+        this.dx = 0; 
+    }
 
-        let targetRow = Math.floor(checkY / this.highSize);
-        let targetCol = Math.floor(checkX / this.widthSize);
+    let nextY = this.y + this.dy;
+    if (!this.checkCollision(this.x, nextY, map)) {
+        this.y = nextY;
+    } else {
+        this.dy = 0;
+    }
 
-        if (map[targetRow][targetCol] !== 1) {
-            this.x = nextX;
-            this.y = nextY;
-        } else {
-            this.dx = 0;
-            this.dy = 0;
+    
+    this.snapToGrid();
+    
+}
+
+// ?
+checkCollision(x, y, map) {
+    const padding = 3; // Margem para não colidir exatamente no limite
+    const checkRadius = this.radius - padding;
+
+    // Pontos de teste nos limites da circunferência
+    const points = [
+        { x: x - checkRadius, y: y - checkRadius }, // Canto superior esquerdo
+        { x: x + checkRadius, y: y - checkRadius }, // Canto superior direito
+        { x: x - checkRadius, y: y + checkRadius }, // Canto inferior esquerdo
+        { x: x + checkRadius, y: y + checkRadius }  // Canto inferior direito
+    ];
+
+    for (let p of points) {
+        let col = Math.floor(p.x / this.widthSize);
+        let row = Math.floor(p.y / this.highSize);
+
+        // Se estiver fora do mapa ou em cima de parede (1)
+        if (!map[row] || map[row][col] === undefined || map[row][col] === 1) {
+            return true; 
         }
     }
+    return false; 
+}
+
+// ?
+// Alinha suavemente o Pac-Man ao centro do corredor ao mudar de sentido
+snapToGrid() {
+    const threshold = 4; // Distância limite para alinhar
+    
+    // Se estiver se movendo na horizontal, alinha no centro vertical da linha
+    if (this.dx !== 0) {
+        let centerY = Math.floor(this.y / this.highSize) * this.highSize + this.highSize / 2;
+        if (Math.abs(this.y - centerY) < threshold) {
+            this.y = centerY;
+        }
+    }
+    
+    // Se estiver se movendo na vertical, alinha no centro horizontal da coluna
+    if (this.dy !== 0) {
+        let centerX = Math.floor(this.x / this.widthSize) * this.widthSize + this.widthSize / 2;
+        if (Math.abs(this.x - centerX) < threshold) {
+            this.x = centerX;
+        }
+    }
+}
+
 }
