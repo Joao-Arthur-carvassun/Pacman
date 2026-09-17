@@ -5,8 +5,8 @@ export class Pacman {
         this.y = y;
         this.widthSize = widthSize;
         this.highSize = highSize;
-        this.radius = 10;
-        this.speed = 3;
+        this.radius = 9;
+        this.speed = 2;
         this.dx = 0;
         this.dy = 0;
         this.rotation = 0;
@@ -48,7 +48,7 @@ export class Pacman {
     let currentCol = Math.floor(this.x/this.widthSize);
 
     if(map[currentRow][currentCol] == 0 ){
-        map[currentRow][currentCol] = -1;
+        map[currentRow][currentCol] = -2;
         this.score+=10
     }
     
@@ -58,7 +58,7 @@ export class Pacman {
 
 // ?
 checkCollision(x, y, map) {
-    const padding =1; // Margem para não colidir exatamente no limite
+    const padding =0.5; // Margem para não colidir exatamente no limite
     const checkRadius = this.radius - padding;
 
     // Pontos de teste nos limites da circunferência

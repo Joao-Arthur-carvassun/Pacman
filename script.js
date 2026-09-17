@@ -9,7 +9,7 @@ const WidthSize = 25;
 const HighSize = 30;  
 
 let gameMap = new Map();
-let ghost = new Ghost(((gameMap.map[0].length)*WidthSize) / 2 + WidthSize / 2,(gameMap.map.length / 2 * HighSize) + HighSize/2,WidthSize,HighSize)
+let ghost = new Ghost(((gameMap.map[0].length-1)*WidthSize) / 2 + WidthSize / 2,((gameMap.map.length-1) / 2 * HighSize) + HighSize/2,WidthSize,HighSize)
 let pacman = new Pacman(1 * WidthSize + WidthSize / 2, 1 * HighSize + HighSize / 2, WidthSize, HighSize);
 
 
