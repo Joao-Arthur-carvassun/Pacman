@@ -10,6 +10,7 @@ export class Pacman {
         this.dx = 0;
         this.dy = 0;
         this.rotation = 0;
+        this.score = 0;
     }
 
     draw(ctx) {
@@ -43,6 +44,13 @@ export class Pacman {
         this.dy = 0;
     }
 
+    let currentRow = Math.floor(this.y/this.highSize);
+    let currentCol = Math.floor(this.x/this.widthSize);
+
+    if(map[currentRow][currentCol] == 0 ){
+        map[currentRow][currentCol] = -1;
+        this.score+=10
+    }
     
     this.snapToGrid();
     
@@ -50,7 +58,7 @@ export class Pacman {
 
 // ?
 checkCollision(x, y, map) {
-    const padding = 3; // Margem para não colidir exatamente no limite
+    const padding =1; // Margem para não colidir exatamente no limite
     const checkRadius = this.radius - padding;
 
     // Pontos de teste nos limites da circunferência
@@ -74,7 +82,6 @@ checkCollision(x, y, map) {
 }
 
 // ?
-// Alinha suavemente o Pac-Man ao centro do corredor ao mudar de sentido
 snapToGrid() {
     const threshold = 4; // Distância limite para alinhar
     
