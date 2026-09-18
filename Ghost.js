@@ -62,7 +62,7 @@ export class Ghost {
             }
 
             
-            if (possibleMoves.length === 0) {
+            if (possibleMoves.length === 0) {// caso ele atinja um beco
                 if (map[row - 1] && this.isWalkable(map[row - 1][col])) possibleMoves.push({ col, row: row - 1, dx: 0, dy: -this.velocity });
                 if (map[row + 1] && this.isWalkable(map[row + 1][col])) possibleMoves.push({ col, row: row + 1, dx: 0, dy: this.velocity });
                 if (map[row][col - 1] !== undefined && this.isWalkable(map[row][col - 1])) possibleMoves.push({ col: col - 1, row, dx: -this.velocity, dy: 0 });
