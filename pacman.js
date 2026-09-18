@@ -53,6 +53,19 @@ export class Pacman {
     }
     
     this.snapToGrid();
+
+    console.log(`X: ${this.x}`)
+    console.log(`Y: ${this.y}`)
+
+    let mapwidthMax = map[0].length * this.widthSize;
+
+    if(this.x <= this.widthSize/2){
+        this.x = mapwidthMax - this.widthSize/2
+
+    }else if(this.x> mapwidthMax - this.widthSize/2 ){
+        this.x = this.widthSize/2
+
+    }
     
 }
 
@@ -63,10 +76,10 @@ checkCollision(x, y, map) {
 
     // Pontos de teste nos limites da circunferência
     const points = [
-        { x: x - checkRadius, y: y - checkRadius }, // Canto superior esquerdo
-        { x: x + checkRadius, y: y - checkRadius }, // Canto superior direito
-        { x: x - checkRadius, y: y + checkRadius }, // Canto inferior esquerdo
-        { x: x + checkRadius, y: y + checkRadius }  // Canto inferior direito
+        { x: x - checkRadius, y: y - checkRadius }, 
+        { x: x + checkRadius, y: y - checkRadius }, 
+        { x: x - checkRadius, y: y + checkRadius }, 
+        { x: x + checkRadius, y: y + checkRadius }  
     ];
 
     for (let p of points) {
@@ -83,7 +96,7 @@ checkCollision(x, y, map) {
 
 // ?
 snapToGrid() {
-    const threshold = 4; // Distância limite para alinhar
+    const threshold = 13; // Distância limite para alinhar
     
     // Se estiver se movendo na horizontal, alinha no centro vertical da linha
     if (this.dx !== 0) {

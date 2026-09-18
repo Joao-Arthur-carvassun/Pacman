@@ -1,68 +1,79 @@
 export class Ghost {
-    constructor(x, y, widthSize, highSize) {
+    constructor(x, y, widthSize, highSize, color = "red") {
         this.x = x;
         this.y = y;
         this.widthSize = widthSize;
         this.highSize = highSize;
-        this.velocity = 1;
+        this.color = color;
+        this.velocity = 2;
         this.radius = 8;
-        
-        // Inicializar dx e dy é essencial para não dar undefined
-        this.dx = -this.velocity;
-        this.dy = 0;
+
+        this.dx = 0;
+        this.dy = -this.velocity; 
     }
 
     drawGhost(ctx) {
-        ctx.fillStyle = "red";
+        ctx.fillStyle = this.color;
         ctx.beginPath();
-        ctx.arc(
-            this.x,
-            this.y,
-            this.radius,
-            0,
-            2 * Math.PI
-        );
+        ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
         ctx.fill();
         ctx.closePath();
+    }
+
+    getHeuristicDistance(rowA, colA, rowB, colB) {
+        return Math.hypot(colB - colA, rowB - rowA);
+    }
+
+    isWalkable(tile) {
+        return tile === 0 || tile === -1 || tile === -2;
     }
 
     updateGhost(map, targetX, targetY) {
         let col = Math.floor(this.x / this.widthSize);
         let row = Math.floor(this.y / this.highSize);
 
+        let targetCol = Math.floor(targetX / this.widthSize);
+        let targetRow = Math.floor(targetY / this.highSize);
+
         let centerX = col * this.widthSize + this.widthSize / 2;
         let centerY = row * this.highSize + this.highSize / 2;
 
-        // Se estiver perto do centro do bloco, reavalia o caminho
-        if (Math.abs(this.x - centerX) < this.velocity && Math.abs(this.y - centerY) < this.velocity) {
-            this.x = centerX;
-            this.y = centerY;
+        let isAtCenter = Math.abs(this.x - centerX) < this.velocity && 
+                         Math.abs(this.y - centerY) < this.velocity;
 
+        if (isAtCenter) {
             let possibleMoves = [];
 
-            // A trava de não poder dar meia-volta instantânea:
-            if (map[row - 1] && map[row - 1][col] !== 1 && this.dy >= 0) possibleMoves.push({ dx: 0, dy: -this.velocity }); // Cima
-            if (map[row + 1] && map[row + 1][col] !== 1 && this.dy <= 0) possibleMoves.push({ dx: 0, dy: this.velocity });  // Baixo
-            if (map[row][col - 1] !== 1 && this.dx >= 0) possibleMoves.push({ dx: -this.velocity, dy: 0 });                 // Esquerda
-            if (map[row][col + 1] !== 1 && this.dx <= 0) possibleMoves.push({ dx: this.velocity, dy: 0 });                  // Direita
+            
+            if (map[row - 1] && this.isWalkable(map[row - 1][col]) && this.dy <= 0) {
+                possibleMoves.push({ col, row: row - 1, dx: 0, dy: -this.velocity });
+            }
+            
+            if (map[row + 1] && this.isWalkable(map[row + 1][col]) && this.dy >= 0) {
+                possibleMoves.push({ col, row: row + 1, dx: 0, dy: this.velocity });
+            }
+            
+            if (map[row][col - 1] !== undefined && this.isWalkable(map[row][col - 1]) && this.dx <= 0) {
+                possibleMoves.push({ col: col - 1, row, dx: -this.velocity, dy: 0 });
+            }
+            
+            if (map[row][col + 1] !== undefined && this.isWalkable(map[row][col + 1]) && this.dx >= 0) {
+                possibleMoves.push({ col: col + 1, row, dx: this.velocity, dy: 0 });
+            }
 
-            // Caso esteja parado no início do jogo, permite qualquer direção livre
+            
             if (possibleMoves.length === 0) {
-                if (map[row - 1] && map[row - 1][col] !== 1) possibleMoves.push({ dx: 0, dy: -this.velocity });
-                if (map[row + 1] && map[row + 1][col] !== 1) possibleMoves.push({ dx: 0, dy: this.velocity });
-                if (map[row][col - 1] !== 1) possibleMoves.push({ dx: -this.velocity, dy: 0 });
-                if (map[row][col + 1] !== 1) possibleMoves.push({ dx: this.velocity, dy: 0 });
+                if (map[row - 1] && this.isWalkable(map[row - 1][col])) possibleMoves.push({ col, row: row - 1, dx: 0, dy: -this.velocity });
+                if (map[row + 1] && this.isWalkable(map[row + 1][col])) possibleMoves.push({ col, row: row + 1, dx: 0, dy: this.velocity });
+                if (map[row][col - 1] !== undefined && this.isWalkable(map[row][col - 1])) possibleMoves.push({ col: col - 1, row, dx: -this.velocity, dy: 0 });
+                if (map[row][col + 1] !== undefined && this.isWalkable(map[row][col + 1])) possibleMoves.push({ col: col + 1, row, dx: this.velocity, dy: 0 });
             }
 
             let bestMove = null;
             let shortestDistance = Infinity;
 
             for (let move of possibleMoves) {
-                let nextX = this.x + move.dx;
-                let nextY = this.y + move.dy;
-
-                let dist = Math.hypot(targetX - nextX, targetY - nextY);
-
+                let dist = this.getHeuristicDistance(move.row, move.col, targetRow, targetCol);
                 if (dist < shortestDistance) {
                     shortestDistance = dist;
                     bestMove = move;
@@ -70,6 +81,10 @@ export class Ghost {
             }
 
             if (bestMove) {
+                if (this.dx !== bestMove.dx || this.dy !== bestMove.dy) {
+                    this.x = centerX;
+                    this.y = centerY;
+                }
                 this.dx = bestMove.dx;
                 this.dy = bestMove.dy;
             }
