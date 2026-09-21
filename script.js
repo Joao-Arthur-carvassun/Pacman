@@ -6,11 +6,11 @@ import { Winscreen } from "./Winscreen.js";
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
-const WidthSize = 25; 
-const HighSize = 30;  
+const WidthSize = 25;
+const HighSize = 30; 
 
 const win = new Winscreen(canvas, () => {
-    document.location.reload(); 
+    document.location.reload();
 });
 let gameMap = new Map();
 let ghost = new Ghost(((gameMap.map[0].length-1)*WidthSize) / 2 + WidthSize / 2,((gameMap.map.length-1) / 2 * HighSize) + HighSize/2,WidthSize,HighSize)
