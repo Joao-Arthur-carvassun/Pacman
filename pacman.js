@@ -29,8 +29,8 @@ export class Pacman {
         ctx.closePath();
     }
 
-    update(map) {
-
+    update(Obj,map,points) {
+            
     let nextX = this.x + this.dx;
     if (!this.checkCollision(nextX, this.y, map)) {
         this.x = nextX;
@@ -50,14 +50,11 @@ export class Pacman {
 
     if(map[currentRow][currentCol] == 0 ){
         map[currentRow][currentCol] = -2;
-        this.score+=10
-        
+        this.score+= 10;
+        Obj.subPoints()
     }
     
     this.snapToGrid();
-
-    console.log(`X: ${this.x}`)
-    console.log(`Y: ${this.y}`)
 
     let mapwidthMax = map[0].length * this.widthSize;
 

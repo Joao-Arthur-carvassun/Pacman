@@ -1,8 +1,10 @@
 export class Map {
-    
-     map = [
+
+    pontos = 0;
+
+    map = [
     [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-    [1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1],
+    [1,-2,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1],
     [1,0,1,1,0,1,1,1,0,1,0,1,1,1,0,1,1,0,1],
     [1,0,1,1,0,1,1,1,0,1,0,1,1,1,0,1,1,0,1],
     [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
@@ -24,11 +26,12 @@ export class Map {
     [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
 ];
 
+    fristWrite = true;
+
     drawMap(ctx, widthSize, highSize) {
         ctx.lineWidth = 2;
         ctx.strokeStyle = "blue";
-
-        for (let i = 0; i < this.map.length; i++) {
+            for (let i = 0; i < this.map.length; i++) {
             for (let j = 0; j < this.map[i].length; j++) {
                 if (this.map[i][j] === 1) {
                     let x = widthSize * j;
@@ -65,8 +68,15 @@ export class Map {
                         Math.PI * 2
                     );
                     ctx.fill();
+                    if(this.fristWrite){
+                    this.pontos = this.pontos + 1;
+                    }
                 }
             }
         }
+        this.fristWrite = false;
+    }
+    subPoints(){
+        this.pontos = this.pontos -1;
     }
 }
