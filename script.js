@@ -12,16 +12,22 @@ let gameMap = new Map();
 let ghost = new Ghost(((gameMap.map[0].length-1)*WidthSize) / 2 + WidthSize / 2,((gameMap.map.length-1) / 2 * HighSize) + HighSize/2,WidthSize,HighSize)
 let pacman = new Pacman(1 * WidthSize + WidthSize / 2, 1 * HighSize + HighSize / 2, WidthSize, HighSize);
 
+function drawScore() {
+    ctx.fillStyle = "white";
+    ctx.font = "20px Arial";
+    
+    ctx.fillText("SCORE: " + pacman.score, 10, 25); 
+}
 
 function gameLoop() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-
 
     pacman.update(gameMap.map);
     ghost.updateGhost(gameMap.map,pacman.x,pacman.y);
     gameMap.drawMap(ctx, WidthSize, HighSize);
     pacman.draw(ctx);
     ghost.drawGhost(ctx);
+    drawScore();
 
     requestAnimationFrame(gameLoop);
     

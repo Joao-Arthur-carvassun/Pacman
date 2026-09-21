@@ -12,6 +12,7 @@ export class Pacman {
         this.rotation = 0;
         this.score = 0;
     }
+    
 
     draw(ctx) {
         ctx.fillStyle = "yellow";
@@ -50,6 +51,7 @@ export class Pacman {
     if(map[currentRow][currentCol] == 0 ){
         map[currentRow][currentCol] = -2;
         this.score+=10
+        
     }
     
     this.snapToGrid();
@@ -69,7 +71,6 @@ export class Pacman {
     
 }
 
-// ?
 checkCollision(x, y, map) {
     const padding =0.5; // Margem para não colidir exatamente no limite
     const checkRadius = this.radius - padding;
